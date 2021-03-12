@@ -1,0 +1,29 @@
+
+COMMANDS:
+
+[new react app:] npx create-react-app my-app
+
+COMMAND | grep SEARCH
+
+netstat -ln        ((view processes on ports))
+lsof -i:PORT       ((view process id on port))
+kill PID           ((hard stop a process on a port by process id))
+
+-------------------------------------------------
+TASKS:
+
+install stuff with 'sudo ..... -g ....' but flash this server before i break it
+
+use pm2 start "file/process"  +++ pm2 save to persist
+
+need to open ports to access thru browser: sudo ufw allow 5000
+
+--------------------------------------------------
+NEED TO CHANGE GITHUB PASSWORD AT SOME POINT
+
+user login has been deactivated for safety (root access closed off??)
+--*****helpful video reference for server setup https://www.youtube.com/watch?v=RE2PLyFqCzE***
+-------------------------------------------------
+
+this should cost $5/month
+

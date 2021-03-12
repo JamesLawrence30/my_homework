@@ -1,0 +1,10 @@
+
+Run  ./data-collector.sh to execute the entire program.
+
+************************************************************************
+
+use:  ./data-collector.sh    --to run all
+
+use:  awk -f process.awk raw_data > processed_data    --to process the raw data
+
+use:  awk -f best_route.awk processed_data > best_route      --to find the best route in processed data

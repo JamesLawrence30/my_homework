@@ -1,0 +1,13 @@
+
+ ping -c 86400 www.target.com > raw_data
+
+awk -f process raw_data
+awk -f process raw_data | sort -n
+awk -f process raw_data | sort -n > sorted_data
+
+use cdf plot on GNU plot or use an online CDF calculator / plotter
+
+awk -f assign_probability.awk sorted_data  > cdf_ready
+
+need 86,400 pings
+plot CDF on the ping times (RTT)

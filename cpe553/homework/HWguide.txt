@@ -1,0 +1,11 @@
+/*
+	Author: James Lawrence
+	cite: N/A
+*/
+
+All homeworks must improve the above snippet
+containing name and any help received.
+
+Must use G++ or CLANG compiler for homeworks
+
+really no penalty for "late" homework as long as assignment still open
