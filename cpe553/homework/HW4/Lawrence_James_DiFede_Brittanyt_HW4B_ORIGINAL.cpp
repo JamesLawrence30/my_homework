@@ -4,7 +4,6 @@
 
 #include <time.h>
 #include <iostream>
-#include <cmath> // trunc
 
 using namespace std;
 
@@ -37,14 +36,7 @@ public:
 		setJDate(year, mon, day, hour, min, second);
 		}
 	
-	JulianDate(double jdate) : jday(jdate) {
-		gYear();
-		gMonth();
-		gDay();
-		gHour();
-		gMin();
-		gSec();
-	}
+	JulianDate(double jdate) : jday(jdate) {}
 	
 	// Calculate years portion of jday
     double jYears(int year) {
@@ -55,44 +47,7 @@ public:
         return LeapYearAdjustedDays;
     }
 
-	void gYear() {
-		int gYear = 0;
-		
-		year = gYear;
-	}
-
-	void gMonth() {
-		int gMonth = 0;
-
-		mon = gMonth;
-	}
-
-	void gDay() {
-		int gDay = 0;
-
-		day = gDay;
-	}
-
-	void gHour() {
-		double decimal = jday - trunc(jday);
-		
-		this->hour = trunc(decimal*24);
-	}
-
-	void gMin() {
-		double decimal = jday - trunc(jday);
-		
-		double gMin = decimal*24 - trunc(decimal*24);
-		this->min = gMin*60;
-	}
-
-	void gSec() {
-		double decimal = jday - trunc(jday);
-
-		// second = gSec;
-	}
-	
-	// Calculate months portion of jday
+    // Calculate months portion of jday
 	double jMonths(int pastMonths) {
 		//cout << "Month: " << pastMonths;
 		int runningSumDays = 0;
@@ -199,7 +154,7 @@ public:
 	}
 
     friend JulianDate operator +(JulianDate left, double right) {
-		return JulianDate(left.jday + right);
+        return JulianDate(left.jday + right);
     }
 
     friend ostream& operator <<(ostream& s, JulianDate d) {
@@ -246,12 +201,12 @@ int main() {
 	JulianDate due = today + 7;
 	cout << due << '\n';
 
-	cout << "\nyear: " << due.getYear()
-			 << "\nmonth: " << due.getMonth()
-			 << "\nday: " << due.getDay()
-			 << "\nhour: " << due.getHour()
-			 << "\nmin: " << due.getMin()
-			 << "\nsec: " << due.getSec() << '\n';
+	cout << "\nyear: " << newyear.getYear()
+			 << "\nmonth: " << newyear.getMonth()
+			 << "\nday: " << newyear.getDay()
+			 << "\nhour: " << newyear.getHour()
+			 << "\nmin: " << newyear.getMin()
+			 << "\nsec: " << newyear.getSec() << '\n';
 	JulianDate d1(2019, 1, 1, 0,0,0);
 	for (int i = 0; i < 100; i++)
 		cout << d1 + i;
