@@ -1,13 +1,41 @@
+/*
+	Author: James Lawrence
+	Cite: Brittany DiFede
+*/
+
+/*
+	separate compilation
+	Cube.hh
+	Cube.cc
+	Cylinder.hh
+	Cylinder.cc
+optional:
+	Sphere.hh
+	Sphere.cc
+	Drawing.cc
+	Drawing.hh
+ */
+
+
+#include "cube.hh"
+#include "cylinder.hh"
+#include "sphere.hh"
+#include "drawing.hh"
+
+using namespace std;
+using namespace shapes;
+
 int main() {
 	//translate([0,10,0]) cube(25);
 	Cube c(0,10,0, 25); // make a 25x25x25 cube at location (0,10,0)
 	c.print("cube.stl");
 
+
 	//translate([100,0,0]) cylinder(r=20,h=50, $fn=30);
 	
 	// center of base circle x=100, y=0, z=0 r=20 h=50, number of facets = 30
 	Cylinder cyl(100, 0, 0, 20, 50, 30);
-	c.print("cyl.stl");
+	cyl.print("cyl.stl");
 
 	//%50 bonus
 	// (x,y,z)           r,  numfacets
@@ -19,4 +47,5 @@ int main() {
 	d.add(new Cube(0,10,0,25));
 	d.add(new Cylinder(100,0,0,20,50,30));
 	d.print("drawing.stl");
+
 }
