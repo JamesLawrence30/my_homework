@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>NYC WLB</title>
+    <title>Meet Up | NYC</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
         crossorigin="anonymous">
@@ -14,91 +14,79 @@
     let infoWindow;
 
     function initMap() {
-        const workLatLng = { lat: {{work.lat}}, lng: {{work.lng}} };
-        const lifeLatLng = { lat: {{life.lat}}, lng: {{life.lng}} };
-        const avgLatLng = { lat: {{ (work.lat+life.lat) / 2 }}, lng: {{ (work.lng+life.lng) / 2 }} };
+        /* Use data from app.show_map() */
+        const myLatLng = { lat: {{me.lat}}, lng: {{me.lng}} };
+        const friendLatLng = { lat: {{friend.lat}}, lng: {{friend.lng}} };
+        const avgLatLng = { lat: {{ (me.lat+friend.lat) / 2 }}, lng: {{ (me.lng+friend.lng) / 2 }} };
 
+        /* Initialize Google Map */
         map = new google.maps.Map(document.getElementById('map'), {
             center: avgLatLng,
             zoom: 13
         });
 
-        const work = new google.maps.Marker({
-            position: workLatLng,
+
+        /* Map Pin Markers */
+        const me = new google.maps.Marker({
+            position: myLatLng,
             map,
-            title: "marker"
+            title: "Me"
         });
-        work.setMap(map);
+        me.setMap(map);
         // Add a listener for the click event.
-        work.addListener("click", markerWindow);
+        me.addListener("click", markerWindow);
         infoWindow = new google.maps.InfoWindow();
 
-        const life = new google.maps.Marker({
-            position: lifeLatLng,
+        const friend = new google.maps.Marker({
+            position: friendLatLng,
             map,
-            title: "marker"
+            title: "Friend"
         });
-        life.setMap(map);
+        friend.setMap(map);
         // Add a listener for the click event.
-        life.addListener("click", markerWindow);
+        friend.addListener("click", markerWindow);
         infoWindow = new google.maps.InfoWindow();
 
+
+        /* Meet Up Zone Circle */
         const neighborhood = new google.maps.Circle({
-            strokeColor: "#FF0000",
+            strokeColor: "#E34234",
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: "#FF0000",
-            fillOpacity: 0.35,
+            fillColor: "#DC143C",
+            fillOpacity: 0.25,
             map,
             center: avgLatLng,
-            radius: 500
+            radius: 500,
+            clickable: false
         });
         neighborhood.setMap(map);
-        // Add a listener for the click event.
-        neighborhood.addListener("click", neighborhoodWindow);
-        infoWindow = new google.maps.InfoWindow();
     }
 
-    function neighborhoodWindow(event) {
-      // Since this polygon has only one path, we can call getPath() to return the
-      // MVCArray of LatLngs.
-      let contentString =
-        "<b>Neighborhood</b><br>" +
-        "Clicked location: <br>" +
-        event.latLng.lat() +
-        "," +
-        event.latLng.lng() +
-        "<br>";
-
-      // Replace the info window's content and position.
-      infoWindow.setContent(contentString);
-      infoWindow.setPosition(event.latLng);
-      infoWindow.open(map);
-    }
-
+    /* Design Info Window Popup */
     function markerWindow(event) {
-      // Since this polygon has only one path, we can call getPath() to return the
-      // MVCArray of LatLngs.
-      let contentString =
-        "<b>Marker</b><br>" +
-        "Clicked location: <br>" +
-        event.latLng.lat() +
-        "," +
-        event.latLng.lng() +
-        "<br>";
+        const marker = this;
+        let contentString =
+            `<b>${marker.title}</b><br>`;
 
-      // Replace the info window's content and position.
-      infoWindow.setContent(contentString);
-      infoWindow.setPosition(event.latLng);
-      infoWindow.open(map);
+        // Replace the info window's content and position.
+        infoWindow.setContent(contentString);
+        infoWindow.setPosition(event.latLng);
+        infoWindow.open(map);
     }
 
     </script>
 </head>
 <body>
 <div class="container">
-    <h1>Your Neighborhood</h1>
+    <br>
+    <h1>Meet Up Map</h1>
+    <br>
+    <p>Powered by Google Maps</p>
     <div id="map" style="width:100%; height:500px;"></div>
+    <br>
+    <h4><b>Me:</b> {{address.me}}</h4>
+    <h4><b>Friend:</b> {{address.friend}}</h4>
 </div>
 </body>
 </html>
