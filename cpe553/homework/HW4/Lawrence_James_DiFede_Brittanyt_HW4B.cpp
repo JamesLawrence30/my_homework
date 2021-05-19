@@ -38,12 +38,77 @@ public:
 		}
 	
 	JulianDate(double jdate) : jday(jdate) {
-		gYear();
-		gMonth();
-		gDay();
-		gHour();
-		gMin();
-		gSec();
+		gDate();
+		gTime();
+	}
+	
+	void gDate() {
+		int noDecimal = trunc(jday);
+
+		double year = noDecimal/365; // not accounting for leap year right now
+		this->year = trunc(year);
+		
+		double sumDays = year - trunc(year);
+		sumDays = sumDays*365;
+		int completedMonths = trunc(sumDays/30.5);
+		this->mon = completedMonths + 1; // current month is completed months + 1
+
+		this->day = gDay(completedMonths, sumDays);
+	}
+
+	// Obtain day of month given past months and total days
+	double gDay(int pastMonths, double totalDays) {
+
+		for ( int completedMonths = pastMonths; completedMonths > 0; completedMonths--) {
+			if (completedMonths <= 7) {
+				if (completedMonths == 2) {
+					// Throw out: 31 days from January, 28 days from February
+					totalDays - 31 - 28; // 
+				}
+				else if (completedMonths % 2 == 0) {
+					// Throw out: 31 days from each odd month, 28 days from February, and 30 days from each even month except February
+					totalDays - 31*(completedMonths/2) - 28 - (30*(completedMonths/2 - 1));
+				}
+				else {  // completedMonths % 2 = 1
+					// 31 days
+					totalDays - 31*((completedMonths+1)/2) - 28 - (30*(((completedMonths-1)/2)-1));
+				}
+			}
+			
+			else { // completedMonths >= 8 = min 243 days completed
+				if (completedMonths == 8) {
+					totalDays - 243;
+				}
+				else if (completedMonths == 9) {
+					totalDays - 243 - 30;
+				}
+				else if (completedMonths == 11) {
+					totalDays - 243 - 31 - 2*30;
+				}
+				else if (completedMonths % 2 == 0) {
+					totalDays - 243 - 31*((completedMonths-8)/2) - (30*((completedMonths-8)/2));
+				}
+			}
+		}
+
+		//cout << "Past months: " << pastMonths << ", Days in past months: " << runningSumDays << endl;
+		return (double)totalDays;
+	}
+
+	void gTime() {
+		double decimal = jday - trunc(jday);
+
+		double gHour = decimal*24;
+
+		double gMin = gHour - trunc(gHour);
+		gMin = gMin*60;
+
+		double gSec = gMin - trunc(gMin);
+		gSec = gSec*60;
+		
+		this->hour = trunc(gHour);
+		this->min = trunc(gMin);
+		this->second = trunc(gSec);
 	}
 	
 	// Calculate years portion of jday
@@ -55,43 +120,6 @@ public:
         return LeapYearAdjustedDays;
     }
 
-	void gYear() {
-		int gYear = 0;
-		
-		year = gYear;
-	}
-
-	void gMonth() {
-		int gMonth = 0;
-
-		mon = gMonth;
-	}
-
-	void gDay() {
-		int gDay = 0;
-
-		day = gDay;
-	}
-
-	void gHour() {
-		double decimal = jday - trunc(jday);
-		
-		this->hour = trunc(decimal*24);
-	}
-
-	void gMin() {
-		double decimal = jday - trunc(jday);
-		
-		double gMin = decimal*24 - trunc(decimal*24);
-		this->min = gMin*60;
-	}
-
-	void gSec() {
-		double decimal = jday - trunc(jday);
-
-		// second = gSec;
-	}
-	
 	// Calculate months portion of jday
 	double jMonths(int pastMonths) {
 		//cout << "Month: " << pastMonths;

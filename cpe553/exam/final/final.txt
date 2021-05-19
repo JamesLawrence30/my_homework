@@ -1,0 +1,311 @@
+/*
+ * Author: James Lawrence
+ * I pledge my Honor that I have abided by the Stevens Honor System.
+ */
+
+#####################################################################################################
+#############################################    1    ###############################################
+#####################################################################################################
+
+
+	###########################################################################################
+	###################################    a    ###############################################
+
+	class A {
+	private:
+	  int* p;
+	public:
+	  A() { p = new int[10]; }
+	  ~A() { delete [] p; }
+	};
+
+
+	###########################################################################################
+	###################################    b    ###############################################
+
+	class A {
+	private:
+	  int* p;
+	public:
+	  A() {}
+	  A(int x) : p(new int[10]) { p[0] = x; }
+	  ~A() { delete [] p; }
+	};
+
+	int main() {
+	  A a1;
+	  A a2(3);
+	}
+
+	###########################################################################################
+	###################################    c    ###############################################
+
+	class A {
+	private:
+	  int* p;
+	  int len;
+	public:
+	  A() : len(0), p(new int[10]) { }
+	  void add(int v) {
+	    p[len++] = v;
+	  }
+	  ~A() { delete [] p; }
+	};
+
+	int main() {
+	  A a1;
+	  a1.add(3);
+	  a1.add(4);
+	}
+
+	###########################################################################################
+	###################################    d    ###############################################
+
+	uint32_t fact(int n) {
+	  uint32_t prod = 1;
+	  for (uint32_t i = 1; i <= n; i++)
+	    prod *= i;
+	  return prod;
+	}
+
+#####################################################################################################
+#############################################    2    ###############################################
+#####################################################################################################
+
+#include <iostream>
+
+using namespace std;
+
+class ChessBoard {
+private:
+	int width, height;
+	int* board;
+public:
+	ChessBoard() : width(0), height(0) {
+		board = nullptr;
+	}
+
+	ChessBoard(int width, int height) : width(width), height(height) {
+		board = new int[width*height];
+
+		for(int i=0; i < width*height; i++)
+			board[i] = 0;
+	}
+
+	ChessBoard(const ChessBoard& orig) : width(orig.width), height(orig.height) {
+		for (int i=0; i < width*height; i++)
+			board[i] = orig.board[i];
+	}
+
+	ChessBoard(ChessBoard&& orig) : width(orig.width), height(orig.height), board(orig.board) {
+		orig.board = nullptr;
+	}
+
+	~ChessBoard() {
+		delete [] board;
+	}
+
+	ChessBoard& operator =(ChessBoard copy) {
+		width = copy.width;
+		height = copy.height;
+		swap(board, copy.board);
+		return *this;
+	}
+
+	void clear(int x, int y) {
+		board[y * width + x] = 0;
+	}
+};
+
+ChessBoard makemeone() { // triggers move constructor
+  ChessBoard b(8,8);
+  b.clear(0,0); // set the top-left element = 0
+  return b;
+}
+
+int main() {
+  ChessBoard c(8,8);
+  ChessBoard c2 = c;
+  ChessBoard c3; // create an empty ChessBoard where the pointer = null
+  c3 = c; // use operator = to overwrite and copy c again.
+}
+
+#####################################################################################################
+#############################################    3    ###############################################
+#####################################################################################################
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// TODO 1: Create the necessary classes
+struct Bird {
+	virtual void sound() const =0;
+};
+
+struct Albatross : public Bird {
+	void sound() const override {
+		cout << "awk!" << endl;
+	}
+};
+
+struct Eagle : public Bird {
+	void sound() const override {
+		cout << "screech!" << endl;
+	}
+};
+
+int main() {
+  vector<const Bird*> birds;
+  birds.push_back(new Albatross());
+  birds.push_back(new Eagle());
+
+  // TODO 2:
+  // complete main: write a loop to play sounds for all birds in the list
+  // (should print "awk! screech!" each on a new line)
+  for (auto b : birds)
+  	b->sound();
+}
+
+#####################################################################################################
+#############################################    4    ###############################################
+#####################################################################################################
+
+#include <bits/stdc++.h>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+
+using namespace std;
+
+int main() {
+
+	// Open file given filename
+	std::ifstream f ("data.dat");
+
+	string lineBuf;
+	unordered_map<char, int> umap;
+
+	int num = 0;
+	while ( getline(f, lineBuf) ) { // Traverse data
+		num++;
+
+		std::istringstream line(lineBuf);
+		
+		char letter;
+		line >> letter;
+		
+		umap[letter] = num;
+	}
+
+	// Print unordered map
+	for (auto pair : umap)
+		std::cout << pair.first << ' ' << pair.second << ' ';
+
+	return 1;
+}
+
+#####################################################################################################
+#############################################    5    ###############################################
+#####################################################################################################
+
+	###########################################################################################
+	###################################    a    ###############################################
+
+	#include <iostream>
+	using namespace std;
+
+	int countBits(int n) {
+		int bits=0;
+
+		for (int i = 1 << 30; i > 0; i = i / 2)
+			if((n & i) != 0)
+				bits++;
+
+		return bits;
+	}
+	 
+	int main() {
+		cout << countBits(9) << endl;
+		cout << countBits(16) << endl;
+	}
+
+	###########################################################################################
+	###################################    b    ###############################################
+
+	#include <iostream>
+	#include <cmath>
+
+	using namespace std;
+
+	double polynomial(double arr[], int len, double x) {
+		double ans=0.0;
+
+		for (int i = 0; i < len; i++)
+			ans += ( arr[i] * pow( x , len-1-i ) );
+
+		return ans;
+	}
+
+	int main() {
+		double c[] = {5.0, 1.0, 2.0, 3.5, 5.2};
+		cout << polynomial(c, 5, 2.2);
+	}
+
+	###########################################################################################
+	###################################    c    ###############################################
+
+	#include <iostream>
+	using namespace std;
+
+	int main() {
+		constexpr int rows = 3, cols = 4;
+		double x[rows][cols] = {
+		  {1, 2, 3.5},
+		  {2, -1, 1.5}
+		};
+
+		double sum=0.0;
+		for (int i=0; i< rows-1; i++) {
+			for (int j=0; j<cols-1; j++)
+				sum += x[i][j];
+			cout << sum << ' ';
+			sum=0.0;
+		}
+		cout << endl;
+		for (int i=0; i<cols-1; i++) {
+			for (int j=0; j<rows-1; j++)
+				sum += x[j][i];
+			cout << sum << ' ';
+			sum=0.0;
+		}
+	}
+
+	###########################################################################################
+	###################################    d    ###############################################
+
+	#include <iostream>
+	#include <string>
+
+	using namespace std;
+
+	template <typename T>
+	T sum(T arr[], int len) {
+		T running_sum;
+
+		for(int i=0; i<len; i++)
+			running_sum = running_sum + arr[i];
+
+		return running_sum;
+	}
+
+	int main() {
+	  string a[] = {"yo", "ho"};
+	  int b[] = {1, 2, 3};
+
+	  cout << sum(a, 2) << '\n';
+	  cout << sum(b, 3) << '\n';
+	}
+
+########################################################################################################
+########################################################################################################
+########################################################################################################
