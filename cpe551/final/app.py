@@ -33,9 +33,10 @@ def index():
 
 @app.route("/school")
 def show_school():
-    school = schools_by_key.get(request.args['school_code'])
-    if school:
-        return render_template('map.html', school=school)
+    first_school = schools_by_key.get(request.args['first_school_code'])
+    second_school = schools_by_key.get(request.args['second_school_code'])
+    if first_school and second_school:
+        return render_template('map.html', first_school=first_school, second_school=second_school)
     else:
         return redirect("/") # School not found, stay on entry page
 

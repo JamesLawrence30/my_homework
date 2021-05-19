@@ -11,16 +11,39 @@
     type="text/javascript"></script>
     <script type="text/javascript">
     function initMap() {
-        new google.maps.Map(document.getElementById('map'), {
-            center: {lat: {{school.lat}}, lng: {{school.lng}}},
+        const firstLatLng = { lat: {{first_school.lat}}, lng: {{first_school.lng}} };
+        const secondLatLng = { lat: {{second_school.lat}}, lng: {{second_school.lng}} };
+        const avgLatLng = { lat: {{ (first_school.lat+second_school.lat) / 2 }}, lng: {{ (first_school.lng+second_school.lng) / 2 }} }
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: avgLatLng,
             zoom: 16
-          });
+        });
+        new google.maps.Marker({
+            position: firstLatLng,
+            map,
+            title: "marker"
+        });
+        new google.maps.Marker({
+            position: secondLatLng,
+            map,
+            title: "marker"
+        });
+        new google.maps.Circle({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.35,
+            map,
+            center: secondLatLng,
+            radius: 400
+        });
     }
     </script>
 </head>
 <body>
 <div class="container">
-    <h1>{{school.name}} School</h1>
+    <h1>Cali Schools</h1>
     <div id="map" style="width:100%; height:500px;"></div>
 </div>
 </body>
