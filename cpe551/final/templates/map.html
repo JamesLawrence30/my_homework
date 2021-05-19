@@ -3,47 +3,101 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>Local Schools</title>
+    <title>NYC WLB</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
         integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
         crossorigin="anonymous">
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQ5gStIZnEdlzyzu_h1gu1G5RWwFk0w54&callback=initMap"
     type="text/javascript"></script>
     <script type="text/javascript">
+    let map;
+    let infoWindow;
+
     function initMap() {
-        const firstLatLng = { lat: {{first_school.lat}}, lng: {{first_school.lng}} };
-        const secondLatLng = { lat: {{second_school.lat}}, lng: {{second_school.lng}} };
-        const avgLatLng = { lat: {{ (first_school.lat+second_school.lat) / 2 }}, lng: {{ (first_school.lng+second_school.lng) / 2 }} }
-        const map = new google.maps.Map(document.getElementById('map'), {
+        const workLatLng = { lat: {{work.lat}}, lng: {{work.lng}} };
+        const lifeLatLng = { lat: {{life.lat}}, lng: {{life.lng}} };
+        const avgLatLng = { lat: {{ (work.lat+life.lat) / 2 }}, lng: {{ (work.lng+life.lng) / 2 }} };
+
+        map = new google.maps.Map(document.getElementById('map'), {
             center: avgLatLng,
-            zoom: 16
+            zoom: 13
         });
-        new google.maps.Marker({
-            position: firstLatLng,
+
+        const work = new google.maps.Marker({
+            position: workLatLng,
             map,
             title: "marker"
         });
-        new google.maps.Marker({
-            position: secondLatLng,
+        work.setMap(map);
+        // Add a listener for the click event.
+        work.addListener("click", markerWindow);
+        infoWindow = new google.maps.InfoWindow();
+
+        const life = new google.maps.Marker({
+            position: lifeLatLng,
             map,
             title: "marker"
         });
-        new google.maps.Circle({
+        life.setMap(map);
+        // Add a listener for the click event.
+        life.addListener("click", markerWindow);
+        infoWindow = new google.maps.InfoWindow();
+
+        const neighborhood = new google.maps.Circle({
             strokeColor: "#FF0000",
             strokeOpacity: 0.8,
             strokeWeight: 2,
             fillColor: "#FF0000",
             fillOpacity: 0.35,
             map,
-            center: secondLatLng,
-            radius: 400
+            center: avgLatLng,
+            radius: 500
         });
+        neighborhood.setMap(map);
+        // Add a listener for the click event.
+        neighborhood.addListener("click", neighborhoodWindow);
+        infoWindow = new google.maps.InfoWindow();
     }
+
+    function neighborhoodWindow(event) {
+      // Since this polygon has only one path, we can call getPath() to return the
+      // MVCArray of LatLngs.
+      let contentString =
+        "<b>Neighborhood</b><br>" +
+        "Clicked location: <br>" +
+        event.latLng.lat() +
+        "," +
+        event.latLng.lng() +
+        "<br>";
+
+      // Replace the info window's content and position.
+      infoWindow.setContent(contentString);
+      infoWindow.setPosition(event.latLng);
+      infoWindow.open(map);
+    }
+
+    function markerWindow(event) {
+      // Since this polygon has only one path, we can call getPath() to return the
+      // MVCArray of LatLngs.
+      let contentString =
+        "<b>Marker</b><br>" +
+        "Clicked location: <br>" +
+        event.latLng.lat() +
+        "," +
+        event.latLng.lng() +
+        "<br>";
+
+      // Replace the info window's content and position.
+      infoWindow.setContent(contentString);
+      infoWindow.setPosition(event.latLng);
+      infoWindow.open(map);
+    }
+
     </script>
 </head>
 <body>
 <div class="container">
-    <h1>Cali Schools</h1>
+    <h1>Your Neighborhood</h1>
     <div id="map" style="width:100%; height:500px;"></div>
 </div>
 </body>
