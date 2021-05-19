@@ -10,10 +10,12 @@
 </head>
 <body>
 <div class="container">
-    <h1>Choose a School</h1>
-    {% for school in schools %}
-    <p><a class="btn btn-primary btn-lg" href="{{school.key}}">{{school.name}}</a></p>
-    {% endfor %}
+<br><br>
+<form action="/school">
+  <label for="school_code">School Code:</label><br>
+  <input type="text" name="school_code"><br><br>
+  <input type="submit" value="Submit">
+</form> 
 </div>
 </body>
 </html>
